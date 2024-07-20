@@ -5,12 +5,17 @@ S=nasm
 L=gcc
 
 # define source files
-CLI_S=$(wildcard src/cli/*)
-LIB_S=$(wildcard src/lib/*)
+CLI_CS=$(wildcard src/cli/*.c)
+CLI_SS=$(wildcard src/cli/*.s)
+CLI_S=$(CLI_CS) $(CLI_SS)
+
+LIB_CS=$(wildcard src/lib/*.c)
+LIB_SS=$(wildcard src/lib/*.s)
+LIB_S=$(LIB_CS) $(LIB_SS)
 
 # objects
-CLI_O=$(patsubst %.*, %.o, $(CLI_S))
-LIB_O=$(patsubst %.*, %.o, $(LIB_S))
+CLI_O=$(patsubst %.c, %.o, $(CLI_CS)) $(patsubst %.s, %.o, $(CLI_SS))
+LIB_O=$(patsubst %.c, %.o, $(LIB_CS)) $(patsubst %.s, %.o, $(LIB_SS))
 
 OBJECTS=$(CLI_O) $(LIB_O)
 
@@ -21,6 +26,8 @@ INC_DIR=includes
 C_F=-w -c -Iincludes
 S_F=-felf64
 L_F=
+
+$(info $(CLI_O) $(CLI_S))
 
 .PHONY: build-cli build-lib clean get-requirements
 
