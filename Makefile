@@ -1,9 +1,11 @@
 
 # get C source file list
-C_SRC=$(wildcard src/*.c)
+C_SRC_CL=$(wildcard src/cli/*.c)
+C_SRC_LB=$(wildcard src/lib/*.c)
 
 # get S source file list
-S_SRC=$(wildcard src/*.s)
+S_SRC_CL=$(wildcard src/cli/*.s)
+S_SRC_LB=$(wildcard src/lib/*.s)
 
 # define C compiler
 C=clang
@@ -18,25 +20,33 @@ L=gcc
 C_F=-w -c -Iinc
 S_F=-felf64
 L_F=
+L_F_L=-c
 
 # define objects
-OBJECTS=$(patsubst %.c, %.o, $(C_SRC)) $(patsubst %.s, %.o, $(S_SRC))
+OBJECTS_CL=$(patsubst %.c, %.o, $(C_SRC_CL)) $(patsubst %.s, %.o, $(S_SRC_CL))
 
-.PHONY: build clean get-requirements
+OBJECTS_LB=$(patsubst %.c, %.o, $(C_SRC_LB)) $(patsubst %.s, %.o, $(S_SRC_LB))
+
+OBJECTS=$(OBJECTS_CL) $(OBJECTS_LB)
+
+.PHONY: build-cli build-lib clean get-requirements
+
+build-lib: $(OBJECTS_LB)
+	$(L) $(L_F_L) $(OBJETS_LB) -o minidb_api.o
 
 # compile then link
-build: $(OBJECTS)
+build-cli: $(OBJECTS)
 	$(L) $(L_F) $(OBJECTS) -o minidb
 	
 clean:
 	rm -rf $(OBJECTS)
 
 # compile C files
-src/%.o: src/%.c
+src/%/%.o: src/%/%.c
 	$(C) $(C_F) $< -o $@
 
 # assemble S files
-src/%.o: src/%.s
+src/%/%.o: src/%/%.s
 	$(S) $(S_F) $< -o $@
 
 get-requirements:
