@@ -1,6 +1,8 @@
 
 # minimal database
 
+! UNFINISHED
+
 ## what is minimal database?
 
 a minimal database API for pure C, ASM and C++ with a simple CLI tool.
