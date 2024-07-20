@@ -1,4 +1,0 @@
-src/lib/*.o
-src/cli/*.o
-minidb
-minidb_api.o
