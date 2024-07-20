@@ -1,2 +1,3 @@
 src/*.o
 minidb
+minidb_api.o

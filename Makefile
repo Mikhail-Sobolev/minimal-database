@@ -32,21 +32,27 @@ OBJECTS=$(OBJECTS_CL) $(OBJECTS_LB)
 .PHONY: build-cli build-lib clean get-requirements
 
 build-lib: $(OBJECTS_LB)
-	$(L) $(L_F_L) $(OBJETS_LB) -o minidb_api.o
+	ld -relocatable $(OBJECTS_LB) -o minidb_api.o
 
 # compile then link
-build-cli: $(OBJECTS)
-	$(L) $(L_F) $(OBJECTS) -o minidb
+build-cli: build-lib $(OBJECTS_CL)
+	$(L) $(L_F) $(OBJECTS_CL) minidb_api.o -o minidb
 	
 clean:
 	rm -rf $(OBJECTS)
 
 # compile C files
-src/%/%.o: src/%/%.c
+src/lib/%.o: src/lib/%.c
+	$(C) $(C_F)  $< -o $@
+
+src/cli/%.o: src/cli/%.c
 	$(C) $(C_F) $< -o $@
 
 # assemble S files
-src/%/%.o: src/%/%.s
+src/lib/%.o: src/lib/%.s
+	$(S) $(S_F) $< -o $@
+
+src/cli/%.o: src/cli/%.s
 	$(S) $(S_F) $< -o $@
 
 get-requirements:

@@ -1,5 +1,5 @@
 
-extern void hello(void);
+#include <minidb/minidb.h>
 
 void main() {
     hello();
