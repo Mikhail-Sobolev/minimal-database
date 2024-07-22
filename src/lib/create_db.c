@@ -60,8 +60,10 @@ char *parse_table( mdb *_db, char *db) {
     return db;
 }
 
-mdb *create_db(char *db, char *name) {
+mdb *create_db(char *__db, char *name, size_t dbsize) {
     
+    char *db = __db;
+
     // create new database
     mdb *_db = malloc(sizeof(mdb));
     _db->len = -1;
@@ -69,16 +71,11 @@ mdb *create_db(char *db, char *name) {
     _db->name = malloc(strlen(name)+1);
     mdb_memcpy(_db->name, name, strlen(name)+1);
 
-    while (true) {
+    while (db < __db+dbsize) {
 
         // get next char from database
         char c = *db;
         db++;
-
-        // check for end of database
-        if (c == 0xff) {
-            break;
-        }
 
         // otherwise parse next table
         db = parse_table(_db, db);

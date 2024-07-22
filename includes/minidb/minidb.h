@@ -27,7 +27,7 @@ typedef struct _mdb {
 } mdb;
 
 char *parse_table(mdb *_db, char *db);
-mdb *create_db(char *db, char *name);
+mdb *create_db(char *db, char *name, size_t size);
 
 void distroy_db(mdb *db); 
 void distory_table(mtable *table);
