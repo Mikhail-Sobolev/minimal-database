@@ -40,20 +40,29 @@ char *parse_table( mdb *_db, char *db) {
         db+=strlen(db);
     }
 
+    // create rows
+    table->rows = malloc(sizeof(mrow)*table->hieght);
+
     // loop for hieght
     for (size_t h=0; h<=table->hieght; ++h) {
+        table->rows[h] = malloc(sizeof(mcell)*table->width);
         for (size_t w2=0; w2<=table->width; ++w2) {
-            
+            table->rows[h]->cells[w2] = *((int*)db);
+            db += sizeof(int);
         }
     }
-
+    
+    _db->len++;
+    _db->tables = realloc(_db->tables, (_db->len+1)*sizeof(mtable*));
+    _db->tables[len] = table;
     return db;
 }
 
-mdb *create_db(char *db) {
+mdb *create_db(char *db, char *db_name) {
     
     // create new database
     mdb *_db = malloc(sizeof(mdb));
+    _db->len = -1;
    
     while (true) {
 
@@ -66,16 +75,8 @@ mdb *create_db(char *db) {
             break;
         }
 
-        // check for start of table
-        else if (c == 0xfe) {
-            db = parse_table(_db, db);
-        }
-
-        // otherwise return error:
-        else {
-            distroy_db(_db);
-            return (mdb*)0;
-        }
+        // otherwise parse next table
+        db = parse_table(_db, db);
     }
+    return _db;
 }
-

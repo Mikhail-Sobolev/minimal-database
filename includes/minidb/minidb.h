@@ -20,13 +20,15 @@ typedef struct _mtable {
 } mtable;
 
 typedef struct _mdb {
-    size_t ntables;
-    mtable *tables;
+    char *name;
+    size_t len;
+    mtable **tables;
 } mdb;
 
+char *parse_table(mdb *_db, char *db);
 mdb *create_db(char *db);
-void distroy_db(mdb *db);
 
-void 
+void distroy_db(mdb *db); 
+void distory_table(mtable *table);
 
 #endif
