@@ -29,8 +29,11 @@ L_F=
 
 $(info $(CLI_O) $(CLI_S))
 
-.PHONY: build-cli build-lib clean get-requirements
+.PHONY: build-cli-dbg build-cli build-lib clean get-requirements
 
+build-cli-dbg:
+	ld --realocatable $(LIB_O) -o minidb_api.o
+	$(L) $(L_F) $(CLI_O) -g minidb_api.o -o minidb_dbg
 build-cli: $(LIB_O) $(CLI_O)
 	ld --relocatable $(LIB_O) -o minidb_api.o
 	$(L) $(L_F) $(CLI_O) minidb_api.o -o minidb

@@ -17,6 +17,11 @@ assumes you have apt installed already.
 
 it simply just apt installs: clang, gcc, nasm
 
+## build-cli-dbg
+    make build-cli-dbg
+    
+build the cli app that can be debugged by gdb
+
 ## build-cli
 
     make build-cli
