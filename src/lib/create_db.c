@@ -1,6 +1,8 @@
 
 
 #include <minidb/minidb.h>
+#include <stdbool.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <memory.h>
@@ -17,10 +19,10 @@ void mdb_memcpy(char *to, char *from, size_t len) {
 char *parse_table( mdb *_db, char *db) {
     
     // allocate new table
-    mtable *table = malloc(sizeof(table));
+    mtable *table = (mtable*)malloc(sizeof(table));
     
     // get key
-    table->key = malloc(strlen(db));
+    table->key = (char*)malloc(strlen(db));
     mdb_memcpy(table->key, db, strlen(db));
     
     // get width and hieght from db
@@ -35,35 +37,38 @@ char *parse_table( mdb *_db, char *db) {
     for (size_t w1=0; w1<=table->width; ++w1) {
         
         // copy over the name
-        table->names[w1] = malloc(strlen(db));
+        table->names[w1] = (char*)malloc(strlen(db));
         mdb_memcpy(table->names[w1], db, strlen(db));
         db+=strlen(db);
     }
 
     // create rows
-    table->rows = malloc(sizeof(mrow)*table->hieght);
+    table->rows = (mrow*)malloc(sizeof(mrow)*table->hieght);
 
     // loop for hieght
     for (size_t h=0; h<=table->hieght; ++h) {
-        table->rows[h] = malloc(sizeof(mcell)*table->width);
+        table->rows[h].cells = (mcell*)malloc(sizeof(mcell)*table->width);
         for (size_t w2=0; w2<=table->width; ++w2) {
-            table->rows[h]->cells[w2] = *((int*)db);
+            table->rows[h].cells[w2].value = *((int*)db);
             db += sizeof(int);
         }
     }
     
     _db->len++;
     _db->tables = realloc(_db->tables, (_db->len+1)*sizeof(mtable*));
-    _db->tables[len] = table;
+    _db->tables[_db->len] = table;
     return db;
 }
 
-mdb *create_db(char *db, char *db_name) {
+mdb *create_db(char *db, char *name) {
     
     // create new database
     mdb *_db = malloc(sizeof(mdb));
     _db->len = -1;
-   
+    
+    _db->name = malloc(strlen(name)+1);
+    mdb_memcpy(_db->name, name, strlen(name)+1);
+
     while (true) {
 
         // get next char from database

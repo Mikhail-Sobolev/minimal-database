@@ -8,7 +8,7 @@ void distroy_table(mtable *table) {
 
     // free all rows
     for (int r=table->hieght; r != 0; r--) {
-        free(table->rows[r]);
+        free(table->rows[r].cells);
     } 
 
     // free all names 

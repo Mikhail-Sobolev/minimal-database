@@ -2,6 +2,7 @@
 #ifndef MINIDB_MINIDB_H
 #define MINIDB_MINIDB_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 typedef struct _mcell {
@@ -26,7 +27,7 @@ typedef struct _mdb {
 } mdb;
 
 char *parse_table(mdb *_db, char *db);
-mdb *create_db(char *db);
+mdb *create_db(char *db, char *name);
 
 void distroy_db(mdb *db); 
 void distory_table(mtable *table);
