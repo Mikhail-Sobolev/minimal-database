@@ -2,6 +2,31 @@
 #ifndef MINIDB_MINIDB_H
 #define MINIDB_MINIDB_H
 
-extern void hello(void);
+#include <stdint.h>
+
+typedef struct _mcell {
+    int value;
+} mcell;
+
+typedef struct _mrow {
+    mcell *cells;
+} mrow;
+
+typedef struct _mtable {
+    char *key;
+    size_t width, hieght;
+    char **names;
+    mrow *rows;
+} mtable;
+
+typedef struct _mdb {
+    size_t ntables;
+    mtable *tables;
+} mdb;
+
+mdb *create_db(char *db);
+void distroy_db(mdb *db);
+
+void 
 
 #endif
